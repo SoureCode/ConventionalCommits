@@ -1,6 +1,6 @@
 <?php
 
-namespace SoureCode\ConventionalCommits;
+namespace SoureCode\ConventionalCommits\Commit;
 
 use function count;
 use Symfony\Component\String\AbstractString;
