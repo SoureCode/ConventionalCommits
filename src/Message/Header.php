@@ -1,12 +1,12 @@
 <?php
 
-namespace SoureCode\ConventionalCommits\Commit;
+namespace SoureCode\ConventionalCommits\Message;
 
-use function count;
 use InvalidArgumentException;
+use function count;
 use function Symfony\Component\String\u;
 
-final class Header
+class Header implements HeaderInterface
 {
     private const EXPRESSION = '/^(?<type>[a-zA-Z]+)(\((?<scope>[a-zA-Z]+)\))?(?<breaking>!)?: (?<description>.+)$/m';
 
@@ -40,24 +40,6 @@ final class Header
             $matches['scope'] ?? null,
             $matches['breaking'] ?? false,
         );
-    }
-
-    public function toString(): string
-    {
-        $headerParts = [$this->type];
-
-        if ($this->scope) {
-            $headerParts[] = sprintf('(%s)', $this->scope);
-        }
-
-        if ($this->isBreakingChange) {
-            $headerParts[] = '!';
-        }
-
-        $headerParts[] = ': ';
-        $headerParts[] = $this->description;
-
-        return implode('', $headerParts);
     }
 
     public function getType(): string
@@ -110,7 +92,7 @@ final class Header
         return $this->isBreakingChange;
     }
 
-    public function setIsBreakingChange(bool $isBreakingChange): self
+    public function setBreakingChange(bool $isBreakingChange): self
     {
         return new self(
             $this->type,
@@ -118,5 +100,23 @@ final class Header
             $this->scope,
             $isBreakingChange,
         );
+    }
+
+    public function __toString(): string
+    {
+        $headerParts = [$this->type];
+
+        if ($this->scope) {
+            $headerParts[] = sprintf('(%s)', $this->scope);
+        }
+
+        if ($this->isBreakingChange) {
+            $headerParts[] = '!';
+        }
+
+        $headerParts[] = ': ';
+        $headerParts[] = $this->description;
+
+        return implode('', $headerParts);
     }
 }

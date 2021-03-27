@@ -1,12 +1,13 @@
 <?php
 
-namespace SoureCode\ConventionalCommits\Tests;
+namespace SoureCode\ConventionalCommits\Tests\Message;
 
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
-use SoureCode\ConventionalCommits\Footer;
-use SoureCode\ConventionalCommits\Header;
-use SoureCode\ConventionalCommits\Message;
+use SoureCode\ConventionalCommits\Message\Footer;
+use SoureCode\ConventionalCommits\Message\FooterInterface;
+use SoureCode\ConventionalCommits\Message\Header;
+use SoureCode\ConventionalCommits\Message\Message;
 
 class MessageTest extends TestCase
 {
@@ -17,9 +18,9 @@ class MessageTest extends TestCase
         $message = Message::fromString("docs(readme)!: destroy the stuff\r\n\r\nlorem ipsum\r\n\r\ndolor amet\r\n\r\nfoo: bar\nBREAKING CHANGE: foo\nfix #1342");
 
         // Act and Assert
-        self::assertSame('docs(readme)!: destroy the stuff', $message->getHeader()->toString());
-        self::assertSame('foo(bar)!: lorem ipsum', $message->setHeader($header)->getHeader()->toString());
-        self::assertSame('docs(readme)!: destroy the stuff', $message->getHeader()->toString());
+        self::assertSame('docs(readme)!: destroy the stuff', (string) $message->getHeader());
+        self::assertSame('foo(bar)!: lorem ipsum', (string) $message->setHeader($header)->getHeader());
+        self::assertSame('docs(readme)!: destroy the stuff', (string) $message->getHeader());
     }
 
     public function testGetSetBody(): void
@@ -50,14 +51,14 @@ class MessageTest extends TestCase
     }
 
     /**
-     * @param Footer[] $footers
+     * @param FooterInterface[] $footers
      */
     private function stringifyFooters(array $footers): string
     {
         $stringParts = [];
 
         foreach ($footers as $footer) {
-            $stringParts[] = $footer->toString();
+            $stringParts[] = (string) $footer;
         }
 
         return implode("\n", $stringParts);
@@ -72,7 +73,7 @@ class MessageTest extends TestCase
         $message = Message::fromString($input);
 
         // Assert
-        self::assertSame($header, $message->getHeader()->toString());
+        self::assertSame($header, (string) $message->getHeader());
         self::assertSame($body, $message->getBody());
         self::assertSame($footer, $this->stringifyFooters($message->getFooters()));
     }
@@ -98,7 +99,7 @@ class MessageTest extends TestCase
         $message = Message::fromString($input);
 
         // Act and Assert
-        self::assertSame($input, $message->toString());
+        self::assertSame($input, (string) $message);
     }
 
     public function fromStringDataProvider()

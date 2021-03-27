@@ -1,12 +1,12 @@
 <?php
 
-namespace SoureCode\ConventionalCommits\Commit;
+namespace SoureCode\ConventionalCommits\Message;
 
-use function count;
 use InvalidArgumentException;
+use function count;
 use function Symfony\Component\String\u;
 
-final class Footer
+class Footer implements FooterInterface
 {
     private const EXPRESSION = '/^(?<key>[a-zA-Z-]+|BREAKING CHANGE)(?<separator>: | #)(?<value>.+)$/sm';
 
@@ -27,7 +27,7 @@ final class Footer
         $this->value = $value;
     }
 
-    public static function fromString(string $text): self
+    public static function fromString(string $text): FooterInterface
     {
         $matches = u($text)->match(self::EXPRESSION);
 
@@ -92,7 +92,7 @@ final class Footer
         );
     }
 
-    public function toString(): string
+    public function __toString(): string
     {
         $footerParts = [$this->key];
 

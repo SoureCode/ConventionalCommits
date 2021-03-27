@@ -1,10 +1,10 @@
 <?php
 
-namespace SoureCode\ConventionalCommits\Tests;
+namespace SoureCode\ConventionalCommits\Tests\Message;
 
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
-use SoureCode\ConventionalCommits\Footer;
+use SoureCode\ConventionalCommits\Message\Footer;
 
 class FooterTest extends TestCase
 {
@@ -76,7 +76,7 @@ class FooterTest extends TestCase
         $footer = Footer::fromString($input);
 
         // Act and Assert
-        self::assertSame($input, $footer->toString());
+        self::assertSame($input, (string) $footer);
     }
 
     public function fromStringDataProvider()

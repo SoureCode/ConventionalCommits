@@ -1,29 +1,29 @@
 <?php
 
-namespace SoureCode\ConventionalCommits\Commit;
+namespace SoureCode\ConventionalCommits\Message;
 
 use function count;
 use Symfony\Component\String\AbstractString;
 use function Symfony\Component\String\u;
 use Symfony\Component\String\UnicodeString;
 
-final class Message
+class Message implements MessageInterface
 {
     private const START_WITH_FOOTER_EXPRESSION = '/^(?<key>[a-zA-Z-]+|BREAKING CHANGE)(?<separator>: | #)/m';
 
-    private Header $header;
+    private HeaderInterface $header;
 
     private ?string $body;
 
     /**
-     * @var Footer[]
+     * @var FooterInterface[]
      */
     private array $footers;
 
     /**
-     * @param Footer[] $footers
+     * @param FooterInterface[] $footers
      */
-    private function __construct(Header $header, ?string $body = null, array $footers = [])
+    private function __construct(HeaderInterface $header, ?string $body = null, array $footers = [])
     {
         $this->header = $header;
         $this->body = $body;
@@ -65,7 +65,7 @@ final class Message
     {
         $body = u();
         /**
-         * @var Footer[] $footers
+         * @var FooterInterface[] $footers
          */
         $footers = [];
 
@@ -106,12 +106,12 @@ final class Message
         ];
     }
 
-    public function getHeader(): Header
+    public function getHeader(): HeaderInterface
     {
         return $this->header;
     }
 
-    public function setHeader(Header $header): self
+    public function setHeader(HeaderInterface $header): self
     {
         return new self(
             $header,
@@ -134,10 +134,30 @@ final class Message
         );
     }
 
-    public function toString(): string
+    /**
+     * {@inheritDoc}
+     */
+    public function getFooters(): array
+    {
+        return $this->footers;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setFooters(array $footers): self
+    {
+        return new self(
+            $this->header,
+            $this->body,
+            $footers,
+        );
+    }
+
+    public function __toString(): string
     {
         $messageParts = [
-            $this->header->toString(),
+            (string) $this->header,
         ];
 
         if ($this->body) {
@@ -148,32 +168,12 @@ final class Message
             $footerParts = [];
 
             foreach ($this->footers as $footer) {
-                $footerParts[] = $footer->toString();
+                $footerParts[] = (string) $footer;
             }
 
             $messageParts[] = implode("\n", $footerParts);
         }
 
         return implode("\n\n", $messageParts);
-    }
-
-    /**
-     * @return Footer[]
-     */
-    public function getFooters(): array
-    {
-        return $this->footers;
-    }
-
-    /**
-     * @param Footer[] $footers
-     */
-    public function setFooters(array $footers): self
-    {
-        return new self(
-            $this->header,
-            $this->body,
-            $footers,
-        );
     }
 }

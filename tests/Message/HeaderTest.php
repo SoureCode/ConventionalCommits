@@ -1,10 +1,10 @@
 <?php
 
-namespace SoureCode\ConventionalCommits\Tests;
+namespace SoureCode\ConventionalCommits\Tests\Message;
 
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
-use SoureCode\ConventionalCommits\Header;
+use SoureCode\ConventionalCommits\Message\Header;
 
 class HeaderTest extends TestCase
 {
@@ -37,7 +37,7 @@ class HeaderTest extends TestCase
 
         // Act and Assert
         self::assertTrue($header->isBreakingChange());
-        self::assertFalse($header->setIsBreakingChange(false)->isBreakingChange());
+        self::assertFalse($header->setBreakingChange(false)->isBreakingChange());
         self::assertTrue($header->isBreakingChange());
     }
 
@@ -88,7 +88,7 @@ class HeaderTest extends TestCase
         $header = Header::fromString($input);
 
         // Act and Assert
-        self::assertSame($input, $header->toString());
+        self::assertSame($input, (string) $header);
     }
 
     public function fromStringDataProvider(): array
