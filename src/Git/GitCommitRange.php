@@ -8,7 +8,6 @@ use Traversable;
 
 class GitCommitRange implements IteratorAggregate
 {
-
     /**
      * @var GitCommit[]
      */
@@ -23,5 +22,4 @@ class GitCommitRange implements IteratorAggregate
     {
         return new ArrayIterator($this->commits);
     }
-
 }

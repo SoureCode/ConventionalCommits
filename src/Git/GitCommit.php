@@ -4,6 +4,7 @@ namespace SoureCode\ConventionalCommits\Git;
 
 use DateTime;
 use DateTimeImmutable;
+use RuntimeException;
 
 class GitCommit
 {
@@ -32,9 +33,22 @@ class GitCommit
     ) {
         $this->hash = $hash;
         $this->author = $author;
-        $this->authorDate = DateTimeImmutable::createFromFormat(DateTime::ISO8601, $authorDate);
+        $parsed = DateTimeImmutable::createFromFormat(DateTime::ISO8601, $authorDate);
+
+        if (!$parsed) {
+            throw new RuntimeException('Could not parse author date.');
+        }
+
+        $this->authorDate = $parsed;
         $this->committer = $committer;
-        $this->committerDate = DateTimeImmutable::createFromFormat(DateTime::ISO8601, $committerDate);
+
+        $parsed = DateTimeImmutable::createFromFormat(DateTime::ISO8601, $committerDate);
+
+        if (!$parsed) {
+            throw new RuntimeException('Could not parse commiter date.');
+        }
+
+        $this->committerDate = $parsed;
         $this->subject = $subject;
         $this->body = $body;
     }

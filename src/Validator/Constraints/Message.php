@@ -6,18 +6,17 @@ use Symfony\Component\Validator\Constraint;
 
 class Message extends Constraint
 {
-
     public Header $header;
 
     public function __construct(
+        Header $header,
         array $options = null,
-        Header $header = null,
         array $groups = null,
         $payload = null,
     ) {
         parent::__construct($options, $groups, $payload);
 
-        $this->header = $header ?? $this->header;
+        $this->header = $header;
     }
 
     /**

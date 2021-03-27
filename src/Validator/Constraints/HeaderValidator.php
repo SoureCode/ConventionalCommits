@@ -12,13 +12,13 @@ use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 
 class HeaderValidator extends ConstraintValidator
 {
-    public function validate($header, Constraint $constraint)
+    public function validate($value, Constraint $constraint)
     {
         if (!$constraint instanceof Header) {
             throw new UnexpectedTypeException($constraint, Header::class);
         }
 
-        if (!$header instanceof HeaderInterface) {
+        if (!$value instanceof HeaderInterface) {
             return;
         }
 
@@ -35,7 +35,7 @@ class HeaderValidator extends ConstraintValidator
             $typeConstraints[] = new Choice(choices: $constraint->typeValues);
         }
 
-        $validator->atPath('type')->validate($header->getType(), $typeConstraints, $groups);
+        $validator->atPath('type')->validate($value->getType(), $typeConstraints, $groups);
 
         $scopeConstraints = [
             new Length(min: $constraint->scopeMinLength, max: $constraint->scopeMaxLength),
@@ -49,14 +49,13 @@ class HeaderValidator extends ConstraintValidator
             $scopeConstraints[] = new Choice(choices: $constraint->scopeValues);
         }
 
-        $validator->atPath('scope')->validate($header->getScope(), $scopeConstraints, $groups);
+        $validator->atPath('scope')->validate($value->getScope(), $scopeConstraints, $groups);
 
         $descriptionConstraints = [
             new NotBlank(),
             new Length(min: $constraint->descriptionMinLength, max: $constraint->descriptionMaxLength),
         ];
 
-        $validator->atPath('description')->validate($header->getDescription(), $descriptionConstraints, $groups);
-
+        $validator->atPath('description')->validate($value->getDescription(), $descriptionConstraints, $groups);
     }
 }

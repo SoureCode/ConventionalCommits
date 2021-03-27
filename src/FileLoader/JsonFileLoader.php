@@ -2,6 +2,9 @@
 
 namespace SoureCode\ConventionalCommits\FileLoader;
 
+use function is_string;
+use const JSON_THROW_ON_ERROR;
+use const PATHINFO_EXTENSION;
 use Symfony\Component\Config\Loader\FileLoader;
 
 class JsonFileLoader extends FileLoader

@@ -126,7 +126,7 @@ final class GitCommits implements IteratorAggregate
 
                 $items[(string) $key->camel()] = (string) $value;
             } else {
-                $items['body'] .= sprintf("\n%s", $value);
+                $items['body'] .= sprintf("\n%s", (string) $line);
             }
         }
 

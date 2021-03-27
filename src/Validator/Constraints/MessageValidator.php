@@ -9,13 +9,13 @@ use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 
 class MessageValidator extends ConstraintValidator
 {
-    public function validate($message, Constraint $constraint)
+    public function validate($value, Constraint $constraint)
     {
         if (!$constraint instanceof Message) {
             throw new UnexpectedTypeException($constraint, Message::class);
         }
 
-        if (!$message instanceof MessageInterface) {
+        if (!$value instanceof MessageInterface) {
             return;
         }
 
@@ -24,7 +24,7 @@ class MessageValidator extends ConstraintValidator
         $groups = $constraint->groups;
 
         $validator->atPath('header')->validate(
-            $message->getHeader(),
+            $value->getHeader(),
             [
                 $constraint->header,
             ],

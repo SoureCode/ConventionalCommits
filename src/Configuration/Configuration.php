@@ -12,6 +12,9 @@ class Configuration implements ConfigurationInterface
     {
         $treeBuilder = new TreeBuilder('conventional_commits');
 
+        /**
+         * @var ArrayNodeDefinition $rootNode
+         */
         $rootNode = $treeBuilder->getRootNode();
 
         $this->addTypeSection($rootNode);
@@ -108,5 +111,4 @@ class Configuration implements ConfigurationInterface
             ->min(15)
             ->max(50);
     }
-
 }

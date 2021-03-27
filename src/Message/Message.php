@@ -145,7 +145,7 @@ class Message implements MessageInterface
     /**
      * {@inheritDoc}
      */
-    public function setFooters(array $footers): self
+    public function setFooters(array $footers): MessageInterface
     {
         return new self(
             $this->header,

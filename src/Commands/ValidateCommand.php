@@ -58,6 +58,9 @@ HELP
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
+        /**
+         * @var string $inputMessage
+         */
         $inputMessage = $input->getArgument('message');
 
         try {

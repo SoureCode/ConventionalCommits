@@ -42,6 +42,9 @@ class ValidateCommitCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
+        /**
+         * @var string $inputCommits
+         */
         $inputCommits = $input->getArgument('commits');
 
         try {

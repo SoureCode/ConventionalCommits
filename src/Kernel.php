@@ -3,6 +3,8 @@
 namespace SoureCode\ConventionalCommits;
 
 use Closure;
+use function dirname;
+use RuntimeException;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Config\Loader\DelegatingLoader;
 use Symfony\Component\Config\Loader\LoaderInterface;
@@ -15,7 +17,6 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use Symfony\Component\DependencyInjection\Loader\DirectoryLoader;
 use Symfony\Component\DependencyInjection\Loader\GlobFileLoader;
 use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
-use function dirname;
 
 class Kernel
 {
@@ -78,11 +79,17 @@ class Kernel
 
     private function getKernelParameters()
     {
+        $homeDirectory = getenv('HOME');
+
+        if (!$homeDirectory) {
+            throw new RuntimeException('Could not get home directory from env.');
+        }
+
         return [
             'kernel.project_directory' => dirname(__DIR__),
             'kernel.environment' => $this->environment,
             'kernel.debug' => $this->debug,
-            'kernel.home_directory' => realpath(getenv('HOME')),
+            'kernel.home_directory' => realpath($homeDirectory),
             'kernel.working_directory' => realpath(getcwd()),
         ];
     }
@@ -112,9 +119,16 @@ class Kernel
     {
         $loader->load(
             function (ContainerBuilder $container) use ($loader) {
-                /* @var PhpFileLoader $kernelLoader */
+                /**
+                 * @var PhpFileLoader $kernelLoader
+                 */
                 $kernelLoader = $loader->getResolver()->resolve(__FILE__);
                 $kernelLoader->setCurrentDir(__DIR__);
+                /**
+                 * @var array $instanceof
+                 * @psalm-suppress PossiblyInvalidFunctionCall
+                 * @psalm-suppress UndefinedThisPropertyFetch
+                 */
                 $instanceof = &Closure::bind(
                     function &() {
                         return $this->instanceof;
@@ -155,6 +169,10 @@ class Kernel
 
     public function getContainer(): ContainerInterface
     {
+        if (!$this->container) {
+            throw new RuntimeException('Kernel not booted.');
+        }
+
         return $this->container;
     }
 }

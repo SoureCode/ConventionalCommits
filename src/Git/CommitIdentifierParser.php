@@ -37,14 +37,14 @@ class CommitIdentifierParser
             $hashesCount = count($hashes);
 
             if (1 === $hashesCount) {
-                $commit = $commits->get($hashes[0]);
+                $commit = $commits->get((string) $hashes[0]);
 
                 $rangeSets[] = new GitCommitRange([$commit]);
             } elseif (2 === $hashesCount) {
                 $first = $hashes[0];
                 $last = $hashes[1];
 
-                $rangeSets[] = $commits->getRange($first, $last);
+                $rangeSets[] = $commits->getRange((string) $first, (string) $last);
             } else {
                 throw new InvalidArgumentException(sprintf('Invalid commit range: "%s"', $range));
             }

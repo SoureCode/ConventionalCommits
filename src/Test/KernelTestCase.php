@@ -3,13 +3,13 @@
 namespace SoureCode\ConventionalCommits\Test;
 
 use PHPUnit\Framework\TestCase;
+use RuntimeException;
 use SoureCode\ConventionalCommits\Kernel;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Contracts\Service\ResetInterface;
 
 class KernelTestCase extends TestCase
 {
-
     protected static ?Kernel $kernel = null;
 
     protected static bool $booted = false;
@@ -20,6 +20,10 @@ class KernelTestCase extends TestCase
     {
         if (!static::$booted) {
             static::bootKernel();
+        }
+
+        if (!self::$kernelContainer) {
+            throw new RuntimeException('Invalid state.');
         }
 
         return self::$kernelContainer;
@@ -86,5 +90,4 @@ class KernelTestCase extends TestCase
 
         self::$kernelContainer = null;
     }
-
 }

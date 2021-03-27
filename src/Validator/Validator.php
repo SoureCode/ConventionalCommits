@@ -2,8 +2,8 @@
 
 namespace SoureCode\ConventionalCommits\Validator;
 
-use SoureCode\ConventionalCommits\Message\Message;
 use SoureCode\ConventionalCommits\Configuration\ConfigurationLoader;
+use SoureCode\ConventionalCommits\Message\Message;
 use Symfony\Component\Validator\Exception\ValidationFailedException;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -48,5 +48,4 @@ class Validator
             throw new ValidationFailedException($message, $violations);
         }
     }
-
 }

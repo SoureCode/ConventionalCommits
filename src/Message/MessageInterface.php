@@ -21,8 +21,6 @@ interface MessageInterface extends Stringable
 
     /**
      * @param FooterInterface[] $footers
-     *
-     * @return $this
      */
     public function setFooters(array $footers): self;
 }

@@ -2,8 +2,8 @@
 
 namespace SoureCode\ConventionalCommits\Message;
 
-use InvalidArgumentException;
 use function count;
+use InvalidArgumentException;
 use function Symfony\Component\String\u;
 
 class Header implements HeaderInterface
