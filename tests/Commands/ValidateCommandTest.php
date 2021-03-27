@@ -64,7 +64,7 @@ class ValidateCommandTest extends KernelTestCase
 
         $output = $commandTester->getDisplay();
 
-        self::assertStringContainsString('Message message is valid.', $output, 'Expect commit message to be valid.');
+        self::assertStringContainsString('Message is valid.', $output, 'Expect commit message to be valid.');
         self::assertSame(0, $exitCode, 'Expect exit code to be 0.');
     }
 
