@@ -50,7 +50,7 @@ final class GitCommits implements IteratorAggregate
             ]
         );
 
-        $commits = u($output)->trim()->split("/\r?\n/");
+        $commits = array_map(fn (AbstractString $string) => (string) $string, u($output)->trim()->split("/\r?\n/"));
 
         return $commits;
     }
