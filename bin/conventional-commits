@@ -1,0 +1,16 @@
+#!/usr/bin/env php
+<?php
+
+use SoureCode\ConventionalCommits\Application;
+use SoureCode\ConventionalCommits\Kernel;
+
+require __DIR__.'/../vendor/autoload_runtime.php';
+
+return static function (array $context) {
+    $kernel = new Kernel($context['APP_ENV'] ?? "env", (bool) $context['APP_DEBUG']);
+
+    $kernel->boot();
+    $container = $kernel->getContainer();
+
+    return $container->get(Application::class);
+};

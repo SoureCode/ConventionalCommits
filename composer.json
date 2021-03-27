@@ -21,7 +21,13 @@
     },
     "require": {
         "php": ">=8.0",
-        "symfony/string": "^5.2"
+        "symfony/string": "^5.2",
+        "symfony/dependency-injection": "^5.2",
+        "symfony/console": "^5.2",
+        "symfony/runtime": "5.x-dev",
+        "symfony/config": "^5.2",
+        "symfony/validator": "^5.2",
+        "symfony/yaml": "^5.2"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.4",
@@ -39,6 +45,9 @@
     "extra": {
         "branch-alias": {
             "dev-master": "0.1.x-dev"
+        },
+        "runtime": {
+            "class": "Symfony\\Component\\Runtime\\SymfonyRuntime"
         }
     }
 }
