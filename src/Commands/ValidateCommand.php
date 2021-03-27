@@ -4,6 +4,7 @@ namespace SoureCode\ConventionalCommits\Commands;
 
 use SoureCode\ConventionalCommits\Message\Message;
 use SoureCode\ConventionalCommits\Validator\Validator;
+use const STDIN;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -11,7 +12,6 @@ use Symfony\Component\Console\Input\StreamableInputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Validator\Exception\ValidationFailedException;
-use const STDIN;
 
 class ValidateCommand extends Command
 {
@@ -29,7 +29,16 @@ class ValidateCommand extends Command
     protected function configure(): void
     {
         $this->setDescription('Validate commit message')
-            ->addArgument('message', InputArgument::REQUIRED, 'Message message');
+            ->addArgument('message', InputArgument::REQUIRED, 'The commit message')
+            ->setHelp(<<<HELP
+Examples:
+    Use it as argument:
+    conventional-commits validate "feat(api): Add id param converter"
+
+    Or just pipe it in:
+    git log --pretty=format:'%B' -n 1 | conventional-commits validate
+HELP
+);
     }
 
     protected function initialize(InputInterface $input, OutputInterface $output)
@@ -61,7 +70,7 @@ class ValidateCommand extends Command
             return Command::FAILURE;
         }
 
-        $io->success('Message message is valid.');
+        $io->success('Message is valid.');
 
         return Command::SUCCESS;
     }

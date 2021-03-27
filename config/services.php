@@ -1,9 +1,11 @@
 <?php
 
+use GitWrapper\GitWrapper;
 use SoureCode\ConventionalCommits\Application;
-use SoureCode\ConventionalCommits\Message\Message;
 use SoureCode\ConventionalCommits\Configuration\ConfigurationLoader;
 use SoureCode\ConventionalCommits\FileLoader\JsonFileLoader;
+use SoureCode\ConventionalCommits\Git\CommitIdentifierParser;
+use SoureCode\ConventionalCommits\Message\Message;
 use SoureCode\ConventionalCommits\Validator\Validator;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Config\Loader\DelegatingLoader;
@@ -33,7 +35,7 @@ return function (ContainerConfigurator $configurator) {
     $configurator->parameters()->set('messageClass', Message::class);
 
     $services
-        ->set('app.configuration.locator', FileLocator::class)
+        ->set('configuration.locator', FileLocator::class)
         ->args(
             [
                 param('kernel.working_directory'),
@@ -41,48 +43,58 @@ return function (ContainerConfigurator $configurator) {
         );
 
     $services
-        ->set('app.configuration.loader.json', JsonFileLoader::class)
+        ->set('configuration.loader.json', JsonFileLoader::class)
         ->tag('configuration.loader')
         ->args(
             [
-                service('app.configuration.locator'),
+                service('configuration.locator'),
             ]
         );
 
     $services
-        ->set('app.configuration.loader.resolver', LoaderResolver::class)
-        ->call('addLoader', [service('app.configuration.loader.json')]);
+        ->set('configuration.loader.resolver', LoaderResolver::class)
+        ->call('addLoader', [service('configuration.loader.json')]);
 
     $services
-        ->set('app.configuration.loader.delegating', DelegatingLoader::class)
+        ->set('configuration.loader.delegating', DelegatingLoader::class)
         ->args(
             [
-                service('app.configuration.loader.resolver'),
+                service('configuration.loader.resolver'),
             ]
         );
 
     $services
-        ->set('app.configuration.loader', ConfigurationLoader::class)
+        ->set('configuration.loader', ConfigurationLoader::class)
         ->args(
             [
-                service('app.configuration.locator'),
-                service('app.configuration.loader.delegating'),
+                service('configuration.locator'),
+                service('configuration.loader.delegating'),
             ]
         )
-        ->alias(ConfigurationLoader::class, 'app.configuration.loader');
+        ->alias(ConfigurationLoader::class, 'configuration.loader');
 
     $services
-        ->set('app.validation.validator', ValidatorInterface::class)
+        ->set('validation.validator', ValidatorInterface::class)
         ->factory([Validation::class, 'createValidator']);
 
     $services
-        ->set('app.validation.commit.validator', Validator::class)
+        ->set('validation.commit.validator', Validator::class)
         ->args(
             [
-                service('app.validation.validator'),
-                service('app.configuration.loader'),
+                service('validation.validator'),
+                service('configuration.loader'),
             ]
         )
-        ->alias(Validator::class, 'app.validation.commit.validator');
+        ->alias(Validator::class, 'validation.commit.validator');
+
+    $services
+        ->set(GitWrapper::class);
+
+    $services->set(CommitIdentifierParser::class)
+        ->args(
+            [
+                service(GitWrapper::class),
+            ]
+        );
 
 };
