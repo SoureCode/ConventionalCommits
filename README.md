@@ -14,6 +14,8 @@ A library to parse and format [conventional commit](https://www.conventionalcomm
 
 - Immutable, chainable, unambiguous API.
 - Parsing and formatting
+- Command to validate string
+- Command to validate commits
 
 ## Install
 
