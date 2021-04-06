@@ -4,10 +4,15 @@
 use SoureCode\ConventionalCommits\Application;
 use SoureCode\ConventionalCommits\Kernel;
 
+$_SERVER['APP_RUNTIME_OPTIONS'] = [
+    'env' => 'prod',
+    'debug' => false,
+];
+
 require __DIR__.'/../vendor/autoload_runtime.php';
 
 return static function (array $context) {
-    $kernel = new Kernel($context['APP_ENV'] ?? "env", (bool) $context['APP_DEBUG']);
+    $kernel = new Kernel($context['APP_ENV'] ?? 'dev', (bool) $context['APP_DEBUG']);
 
     $kernel->boot();
     $container = $kernel->getContainer();

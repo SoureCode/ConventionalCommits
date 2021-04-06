@@ -34,7 +34,7 @@ class Kernel
         $this->debug = $debug;
     }
 
-    public function boot()
+    public function boot(): void
     {
         if ($this->debug && !isset($_ENV['SHELL_VERBOSITY']) && !isset($_SERVER['SHELL_VERBOSITY'])) {
             putenv('SHELL_VERBOSITY=3');
@@ -49,7 +49,7 @@ class Kernel
         $this->booted = true;
     }
 
-    public function initializeContainer()
+    public function initializeContainer(): void
     {
         $containerBuilder = $this->buildContainer();
         $containerBuilder->compile();
@@ -69,7 +69,7 @@ class Kernel
         return $container;
     }
 
-    private function getContainerBuilder()
+    private function getContainerBuilder(): ContainerBuilder
     {
         $container = new ContainerBuilder();
         $container->getParameterBag()->add($this->getKernelParameters());
@@ -77,7 +77,7 @@ class Kernel
         return $container;
     }
 
-    private function getKernelParameters()
+    private function getKernelParameters(): array
     {
         $homeDirectory = getenv('HOME');
 
@@ -94,7 +94,7 @@ class Kernel
         ];
     }
 
-    private function getContainerLoader(ContainerBuilder $container)
+    private function getContainerLoader(ContainerBuilder $container): DelegatingLoader
     {
         $env = $this->getEnvironment();
         $locator = new FileLocator();
@@ -110,12 +110,12 @@ class Kernel
         return new DelegatingLoader($resolver);
     }
 
-    public function getEnvironment()
+    public function getEnvironment(): string
     {
         return $this->environment;
     }
 
-    protected function registerContainerConfiguration(LoaderInterface $loader)
+    protected function registerContainerConfiguration(LoaderInterface $loader): void
     {
         $loader->load(
             function (ContainerBuilder $container) use ($loader) {
@@ -144,14 +144,16 @@ class Kernel
         );
     }
 
-    protected function configureContainer(ContainerConfigurator $configurator, LoaderInterface $loader)
+    protected function configureContainer(ContainerConfigurator $configurator, LoaderInterface $loader): void
     {
-        if (is_file($path = dirname(__DIR__).'/config/services.php')) {
+        $path = dirname(__DIR__).'/config/services.php';
+
+        if (is_file($path)) {
             (require $path)($configurator->withPath($path), $this);
         }
     }
 
-    public function shutdown()
+    public function shutdown(): void
     {
         if (false === $this->booted) {
             return;
@@ -162,7 +164,7 @@ class Kernel
         $this->container = null;
     }
 
-    public function isDebug()
+    public function isDebug(): bool
     {
         return $this->debug;
     }

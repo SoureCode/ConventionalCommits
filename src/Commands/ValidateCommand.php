@@ -4,14 +4,13 @@ namespace SoureCode\ConventionalCommits\Commands;
 
 use SoureCode\ConventionalCommits\Message\Message;
 use SoureCode\ConventionalCommits\Validator\Validator;
-use const STDIN;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\StreamableInputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\Validator\Exception\ValidationFailedException;
+use const STDIN;
 
 class ValidateCommand extends Command
 {
@@ -30,7 +29,8 @@ class ValidateCommand extends Command
     {
         $this->setDescription('Validate commit message')
             ->addArgument('message', InputArgument::REQUIRED, 'The commit message')
-            ->setHelp(<<<HELP
+            ->setHelp(
+                <<<HELP
 Examples:
     Use it as argument:
     conventional-commits validate "feat(api): Add id param converter"
@@ -38,7 +38,7 @@ Examples:
     Or just pipe it in:
     git log --pretty=format:'%B' -n 1 | conventional-commits validate
 HELP
-);
+            );
     }
 
     protected function initialize(InputInterface $input, OutputInterface $output)
@@ -63,15 +63,9 @@ HELP
          */
         $inputMessage = $input->getArgument('message');
 
-        try {
-            $message = Message::fromString($inputMessage);
+        $message = Message::fromString($inputMessage);
 
-            $this->validator->validate($message);
-        } catch (ValidationFailedException $exception) {
-            $io->error($exception->getMessage());
-
-            return Command::FAILURE;
-        }
+        $this->validator->validate($message);
 
         $io->success('Message is valid.');
 

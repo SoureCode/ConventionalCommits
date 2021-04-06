@@ -2,8 +2,7 @@
 
 namespace SoureCode\ConventionalCommits\Commands;
 
-use SoureCode\ConventionalCommits\Git\CommitIdentifierParser;
-use SoureCode\ConventionalCommits\Git\GitCommit;
+use SoureCode\ConventionalCommits\Git\GitCommitRanges;
 use SoureCode\ConventionalCommits\Git\GitCommitRangeSet;
 use SoureCode\ConventionalCommits\Message\Message;
 use SoureCode\ConventionalCommits\Validator\Validator;
@@ -12,7 +11,6 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\Validator\Exception\ValidationFailedException;
 
 class ValidateCommitCommand extends Command
 {
@@ -20,9 +18,9 @@ class ValidateCommitCommand extends Command
 
     private Validator $validator;
 
-    private CommitIdentifierParser $commitIdentifierParser;
+    private GitCommitRanges $commitIdentifierParser;
 
-    public function __construct(CommitIdentifierParser $commitIdentifierParser, Validator $validator)
+    public function __construct(GitCommitRanges $commitIdentifierParser, Validator $validator)
     {
         parent::__construct();
 
@@ -47,26 +45,12 @@ class ValidateCommitCommand extends Command
          */
         $inputCommits = $input->getArgument('commits');
 
-        try {
-            $rangeSets = $this->commitIdentifierParser->parse($inputCommits);
+        $commits = $this->commitIdentifierParser->fetchRanges($inputCommits);
 
-            /**
-             * @var GitCommitRangeSet $rangeSet
-             */
-            foreach ($rangeSets as $rangeSet) {
-                /**
-                 * @var GitCommit $commit
-                 */
-                foreach ($rangeSet as $commit) {
-                    $message = Message::fromString($commit->getSubject()."\n".$commit->getBody());
+        foreach ($commits as $commit) {
+            $message = Message::fromString(sprintf("%s\n%s", $commit->getSubject(), $commit->getBody()));
 
-                    $this->validator->validate($message);
-                }
-            }
-        } catch (ValidationFailedException $exception) {
-            $io->error($exception->getMessage());
-
-            return Command::FAILURE;
+            $this->validator->validate($message);
         }
 
         $io->success('Message is valid.');

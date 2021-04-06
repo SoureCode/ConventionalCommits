@@ -1,11 +1,9 @@
 <?php
 
-use GitWrapper\GitWrapper;
 use SoureCode\ConventionalCommits\Application;
 use SoureCode\ConventionalCommits\Configuration\ConfigurationLoader;
 use SoureCode\ConventionalCommits\FileLoader\JsonFileLoader;
-use SoureCode\ConventionalCommits\Git\CommitIdentifierParser;
-use SoureCode\ConventionalCommits\Message\Message;
+use SoureCode\ConventionalCommits\Git\GitCommitRanges;
 use SoureCode\ConventionalCommits\Validator\Validator;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Config\Loader\DelegatingLoader;
@@ -13,6 +11,7 @@ use Symfony\Component\Config\Loader\LoaderResolver;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\Validator\Validation;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symplify\GitWrapper\GitWrapper;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 
@@ -31,8 +30,6 @@ return function (ContainerConfigurator $configurator) {
     $services
         ->load('SoureCode\\ConventionalCommits\\Commands\\', '../src/Commands/*')
         ->tag('console.command');
-
-    $configurator->parameters()->set('messageClass', Message::class);
 
     $services
         ->set('configuration.locator', FileLocator::class)
@@ -90,10 +87,11 @@ return function (ContainerConfigurator $configurator) {
     $services
         ->set(GitWrapper::class);
 
-    $services->set(CommitIdentifierParser::class)
+    $services->set(GitCommitRanges::class)
         ->args(
             [
                 service(GitWrapper::class),
+                param('kernel.working_directory'),
             ]
         );
 

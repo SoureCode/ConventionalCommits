@@ -2,11 +2,12 @@
 
 namespace SoureCode\ConventionalCommits\Tests\Commands;
 
+use InvalidArgumentException;
 use SoureCode\ConventionalCommits\Application;
 use SoureCode\ConventionalCommits\Configuration\ConfigurationLoader;
 use SoureCode\ConventionalCommits\Test\KernelTestCase;
 use Symfony\Component\Console\Tester\CommandTester;
-use Symfony\Component\Validator\Validation;
+use Symfony\Component\Validator\Exception\ValidationFailedException;
 
 class ValidateCommandTest extends KernelTestCase
 {
@@ -71,8 +72,12 @@ class ValidateCommandTest extends KernelTestCase
     /**
      * @dataProvider validateCommandInvalidDataProvider
      */
-    public function testValidateCommandInvalid(string $input, string $message)
+    public function testValidateCommandInvalid(string $input, string $exception, string $message)
     {
+        // Assert
+        $this->expectExceptionMessage($message);
+        $this->expectException($exception);
+
         // Arrange
         $container = static::getContainer();
         $application = $container->get(Application::class);
@@ -80,16 +85,11 @@ class ValidateCommandTest extends KernelTestCase
         $commandTester = new CommandTester($command);
 
         // Act
-        $exitCode = $commandTester->execute(
+        $commandTester->execute(
             [
                 'message' => $input,
             ]
         );
-
-        $output = $commandTester->getDisplay();
-
-        self::assertStringContainsString('ERROR', $output, $message);
-        self::assertSame(1, $exitCode, 'Expect exit code to be 1.');
     }
 
     public function validateCommandDataProvider()
@@ -139,11 +139,12 @@ class ValidateCommandTest extends KernelTestCase
     public function validateCommandInvalidDataProvider(): array
     {
         return [
-            ['lorem: ipsum', 'Invalid type'],
-            ['feat: lorem ipsum dolor amet lorem ipsum dolor amet lorem ipsum dolor amet', 'To long description'],
-            ['feat: lor', 'To short description'],
-            ['feat(a): lorem', 'To short scope'],
-            ['feat(loremipsumdoloramet): lorem', 'To long scope'],
+            ['lorem ipsum', InvalidArgumentException::class, 'Invalid header format'],
+            ['lorem: ipsum', ValidationFailedException::class, 'The value you selected is not a valid choice'],
+            ['feat: lorem ipsum dolor amet lorem ipsum dolor amet lorem ipsum dolor amet', ValidationFailedException::class, 'This value is too long'],
+            ['feat: lor', ValidationFailedException::class, 'This value is too short'],
+            ['feat(a): lorem', ValidationFailedException::class, 'This value is too short'],
+            ['feat(loremipsumdoloramet): lorem', ValidationFailedException::class, 'This value is too long'],
         ];
     }
 }
