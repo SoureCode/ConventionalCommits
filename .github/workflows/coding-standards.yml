@@ -1,9 +1,7 @@
 name: "Check Coding Standards"
 
 on:
-    create:
     pull_request:
-    push:
 
 jobs:
     coding-standards:

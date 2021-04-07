@@ -1,9 +1,7 @@
 name: "Composer validate"
 
 on:
-    create:
     pull_request:
-    push:
 
 jobs:
     validate:
@@ -28,6 +26,3 @@ jobs:
 
             -   name: Validate composer.json and composer.lock
                 run: composer validate
-
-            -   name: Composer outdated
-                run: composer outdated --minor-only --direct --strict
