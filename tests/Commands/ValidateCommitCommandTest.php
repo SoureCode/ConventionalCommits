@@ -204,10 +204,10 @@ HEREFOC,
         return [
             // Single commits
             [
-                ['8648bac12b9c363f4a7e30cfc95a20b2fcc3f46a' => '8648bac12b9c363f4a7e30cfc95a20b2fcc3f46a'],
+                ['8648bac12b9c363f4a7e30cfc95a20b2fcc3f46a' => ['8648bac12b9c363f4a7e30cfc95a20b2fcc3f46a']],
             ],
             [
-                ['8648bac1' => '8648bac12b9c363f4a7e30cfc95a20b2fcc3f46a'],
+                ['8648bac1' => ['8648bac12b9c363f4a7e30cfc95a20b2fcc3f46a']],
             ],
             // Commit ranges
             [
