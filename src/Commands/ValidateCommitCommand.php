@@ -5,11 +5,13 @@ namespace SoureCode\ConventionalCommits\Commands;
 use SoureCode\ConventionalCommits\Git\GitCommitRanges;
 use SoureCode\ConventionalCommits\Message\Message;
 use SoureCode\ConventionalCommits\Validator\Validator;
+use function strlen;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Throwable;
 
 class ValidateCommitCommand extends Command
 {
@@ -46,14 +48,44 @@ class ValidateCommitCommand extends Command
 
         $commits = $this->commitIdentifierParser->fetchRanges($inputCommits);
 
-        foreach ($commits as $commit) {
-            $message = Message::fromString(sprintf("%s\n%s", $commit->getSubject(), $commit->getBody()));
+        $exitCode = Command::SUCCESS;
 
-            $this->validator->validate($message);
+        foreach ($commits as $commit) {
+            if ($io->isVeryVerbose()) {
+                $io->writeln(sprintf('Commit: %s', $commit->getHash()));
+                $io->writeln(sprintf('Subject: %s', $commit->getSubject()));
+                $body = $commit->getBody();
+
+                if (strlen($body) > 0) {
+                    $io->writeln(sprintf('Body: %s', $commit->getBody()));
+                }
+
+                $io->write('Validate ...', false);
+            }
+
+            try {
+                $message = Message::fromString(sprintf("%s\n%s", $commit->getSubject(), $commit->getBody()));
+
+                $this->validator->validate($message);
+
+                if ($io->isVeryVerbose()) {
+                    $io->write(' valid!', true);
+                }
+            } catch (Throwable $exception) {
+                if ($io->isVeryVerbose()) {
+                    $io->write(' invalid!', true);
+                }
+
+                $io->error($exception->getMessage());
+
+                $exitCode = Command::FAILURE;
+            }
         }
 
-        $io->success('Message is valid.');
+        if (Command::SUCCESS === $exitCode) {
+            $io->success('Messages are valid.');
+        }
 
-        return Command::SUCCESS;
+        return $exitCode;
     }
 }
