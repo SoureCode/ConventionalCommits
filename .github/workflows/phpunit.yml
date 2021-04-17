@@ -3,12 +3,14 @@ name: "PHPUnit Tests"
 on:
     pull_request:
     push:
+        branches:
+            - master
+            - release/*
 
 jobs:
     phpunit:
         name: "PHPUnit Tests"
-
-        runs-on: ${{ matrix.operating-system }}
+        runs-on: ubuntu-latest
 
         strategy:
             matrix:
@@ -18,8 +20,6 @@ jobs:
                     - "highest"
                 php-version:
                     - "8.0"
-                operating-system:
-                    - "ubuntu-latest"
         steps:
             -   name: "Checkout"
                 uses: "actions/checkout@v2"
