@@ -2,13 +2,11 @@
 
 namespace SoureCode\ConventionalCommits\Tests\Commands;
 
-use InvalidArgumentException;
 use SoureCode\ConventionalCommits\Application;
 use SoureCode\ConventionalCommits\Configuration\ConfigurationLoader;
 use SoureCode\ConventionalCommits\Test\KernelTestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\Validator\Exception\ValidationFailedException;
 use Symplify\GitWrapper\GitCommit;
 use Symplify\GitWrapper\GitCommits;
 use Symplify\GitWrapper\GitWorkingCopy;
@@ -45,7 +43,7 @@ class ValidateCommitCommandTest extends KernelTestCase
             'hash' => '3afed635063877a09a1218f8745a52c802cea7c1',
         ],
         'f2c00832' => [
-            'hash' => 'f2c00832f3b157e4c97d9cc303fd9ff45b3d859f'
+            'hash' => 'f2c00832f3b157e4c97d9cc303fd9ff45b3d859f',
         ],
         // Resolve message
         '8648bac12b9c363f4a7e30cfc95a20b2fcc3f46a' => [
@@ -72,10 +70,10 @@ HEREDOC,
             'subject' => 'fix(git): Fix return value',
         ],
         'f2c00832f3b157e4c97d9cc303fd9ff45b3d859f' => [
-            'subject' => 'somethingisreallywrongwith: this commit'
+            'subject' => 'somethingisreallywrongwith: this commit',
         ],
         '2662bdb90202d93cd19c264960be45099b037d7a' => [
-'subject' => 'Add validate command',
+            'subject' => 'Add validate command',
             'body' => <<<HEREFOC
 - Add configuration loader
 - Add validation
@@ -114,7 +112,7 @@ HEREFOC,
 
         $output = $commandTester->getDisplay();
 
-        self::assertStringContainsString('Message is valid.', $output, 'Expect commit message to be valid.');
+        self::assertStringContainsString('Messages are valid.', $output, 'Expect commit message to be valid.');
         self::assertSame(0, $exitCode, 'Expect exit code to be 0.');
     }
 
@@ -163,12 +161,8 @@ HEREFOC,
      *
      * @param Array<string, string[]> $rangeMapping
      */
-    public function testValidateCommitCommandInvalid(array $rangeMapping, string $exception, string $message): void
+    public function testValidateCommitCommandInvalid(array $rangeMapping, string $message): void
     {
-        // Assert
-        $this->expectExceptionMessage($message);
-        $this->expectException($exception);
-
         // Arrange
         $commits = array_key_first($rangeMapping);
         $commitsMapping = $rangeMapping[$commits];
@@ -179,11 +173,17 @@ HEREFOC,
         $commandTester = new CommandTester($command);
 
         // Act
-        $commandTester->execute(
+        $exitCode = $commandTester->execute(
             [
                 'commits' => $commits,
             ]
         );
+
+        // Assert
+        $output = $commandTester->getDisplay();
+
+        self::assertStringContainsString($message, $output, 'Expect commit message to be valid.');
+        self::assertSame(1, $exitCode, 'Expect exit code to be 1.');
     }
 
     public function validateCommitCommandDataProvider(): array
@@ -249,17 +249,14 @@ HEREFOC,
         return [
             [
                 ['3afed635' => ['3afed635063877a09a1218f8745a52c802cea7c1']],
-                InvalidArgumentException::class,
                 'Invalid header format',
             ],
             [
                 ['f2c00832' => ['f2c00832f3b157e4c97d9cc303fd9ff45b3d859f']],
-                ValidationFailedException::class,
                 'This value is too long',
             ],
             [
                 ['f2c00832' => ['f2c00832f3b157e4c97d9cc303fd9ff45b3d859f']],
-                ValidationFailedException::class,
                 'The value you selected is not a valid choice',
             ],
             [
@@ -269,7 +266,6 @@ HEREFOC,
                         '7fd08bb195ac66087a444d399a4882dce653a337',
                     ],
                 ],
-                InvalidArgumentException::class,
                 'Invalid header format',
             ],
             [
@@ -279,7 +275,6 @@ HEREFOC,
                         '7fd08bb195ac66087a444d399a4882dce653a337',
                     ],
                 ],
-                InvalidArgumentException::class,
                 'Invalid header format',
             ],
         ];
