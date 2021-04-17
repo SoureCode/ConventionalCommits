@@ -10,6 +10,8 @@ jobs:
         steps:
             -   name: "Checkout"
                 uses: "actions/checkout@v2"
+                with:
+                    fetch-depth: 0
 
             -   name: "Install PHP"
                 uses: "shivammathur/setup-php@v2"
@@ -31,4 +33,4 @@ jobs:
                 run: "composer install --no-interaction --no-progress --no-suggest"
 
             -   name: "Check commits"
-                run: "./bin/conventional-commits validate:commit $GITHUB_BASE_REF-$GITHUB_HEAD_REF"
+                run: "./bin/conventional-commits validate:commit -vv remotes/origin/$GITHUB_BASE_REF-remotes/origin/$GITHUB_HEAD_REF"
