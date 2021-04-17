@@ -25,6 +25,6 @@ class Application extends BaseApplication
 
     public function getVersion(): string
     {
-        return '0.1.0';
+        return '0.1.0-dev';
     }
 }
