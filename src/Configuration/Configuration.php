@@ -33,7 +33,7 @@ class Configuration implements ConfigurationInterface
 
         $typeNodeChildren
             ->integerNode('min')
-            ->defaultValue(3)
+            ->defaultValue(2)
             ->min(1)
             ->max(5);
 
@@ -50,10 +50,29 @@ class Configuration implements ConfigurationInterface
         $typeNodeChildren
             ->variableNode('values')
             ->cannotBeEmpty()
-            ->defaultValue(['feat', 'fix', 'test', 'chore', 'docs', 'refactor', 'revert'])
+            ->defaultValue(
+                [
+                    'add',
+                    'build',
+                    'bump',
+                    'chore',
+                    'ci',
+                    'cut',
+                    'docs',
+                    'enhance',
+                    'feat',
+                    'fix',
+                    'make',
+                    'optimize',
+                    'perf',
+                    'refactor',
+                    'revert',
+                    'style',
+                    'test',
+                ]
+            )
             ->validate()
-            ->castToArray()
-            ;
+            ->castToArray();
     }
 
     private function addScopeSection(ArrayNodeDefinition $rootNode)
@@ -88,8 +107,7 @@ class Configuration implements ConfigurationInterface
             ->cannotBeEmpty()
             ->defaultValue([])
             ->validate()
-            ->castToArray()
-            ;
+            ->castToArray();
     }
 
     private function addDescriptionSection(ArrayNodeDefinition $rootNode)
