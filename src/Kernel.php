@@ -17,6 +17,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use Symfony\Component\DependencyInjection\Loader\DirectoryLoader;
 use Symfony\Component\DependencyInjection\Loader\GlobFileLoader;
 use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
+use Symplify\GitWrapper\GitWrapper;
 
 class Kernel
 {
@@ -53,6 +54,8 @@ class Kernel
     {
         $containerBuilder = $this->buildContainer();
         $containerBuilder->compile();
+
+        $containerBuilder->set(GitWrapper::class, new GitWrapper());
 
         $this->container = $containerBuilder;
     }

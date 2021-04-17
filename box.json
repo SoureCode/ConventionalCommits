@@ -1,0 +1,16 @@
+{
+    "banner": [
+        "This file is part of the sourecode/conventional-commits project.",
+        "",
+        "(c) Jason Schilling <jason@sourecode.dev>",
+        "",
+        "This source file is subject to the MIT license that is bundled",
+        "with this source code in the file LICENSE."
+    ],
+    "compression": "GZ",
+    "algorithm": "SHA512",
+    "files": [
+        "./config/services.php"
+    ],
+    "git-commit": "git-commit"
+}

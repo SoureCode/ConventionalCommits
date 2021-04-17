@@ -8,6 +8,23 @@ class Application extends BaseApplication
 {
     public function __construct()
     {
-        parent::__construct('conventional-commits', '0.1.0-dev');
+        $version = $this->getVersion();
+        $commit = $this->getCommit();
+
+        if (!str_starts_with($commit, '@')) {
+            $version .= sprintf('@%s', $commit);
+        }
+
+        parent::__construct('conventional-commits', $version);
+    }
+
+    public function getCommit(): string
+    {
+        return '@git-commit@';
+    }
+
+    public function getVersion(): string
+    {
+        return '0.1.0-dev';
     }
 }

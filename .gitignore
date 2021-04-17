@@ -13,4 +13,8 @@ phpunit.xml
 /.phpunit
 
 # Tools
+tools/
 .php_cs.cache
+
+# Output / Dumps
+.box_dump

@@ -9,6 +9,8 @@ $_SERVER['APP_RUNTIME_OPTIONS'] = [
     'debug' => false,
 ];
 
+$_SERVER['SCRIPT_FILENAME'] = __FILE__;
+
 require __DIR__.'/../vendor/autoload_runtime.php';
 
 return static function (array $context) {

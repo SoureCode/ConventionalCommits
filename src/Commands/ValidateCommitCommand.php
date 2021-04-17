@@ -29,7 +29,7 @@ class ValidateCommitCommand extends Command
 
     protected function configure(): void
     {
-        $this->setDescription('Validate commit messages')
+        $this->setDescription('Validate commits')
             ->addArgument('commits', InputArgument::REQUIRED, 'The commit hash, hashes, range or ranges.')
             ->addUsage('8648bac1')
             ->addUsage('8648bac1-8d0536a1,2662bdb9')
