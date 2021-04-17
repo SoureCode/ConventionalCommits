@@ -53,7 +53,8 @@ class GitCommitRanges
             $hashesCount = count($hashes);
 
             if (1 === $hashesCount) {
-                $commits[] = [$hashes[0]];
+                $commit = $gitCommits->get((string) $hashes[0]);
+                $commits[] = [$commit->getHash()];
             } elseif (2 === $hashesCount) {
                 [$first, $last] = $hashes;
 

@@ -22,8 +22,11 @@
         <server name="SHELL_VERBOSITY" value="-1"/>
     </php>
     <testsuites>
-        <testsuite name="SoureCode/CommonComponent Test Suite">
+        <testsuite name="SoureCode/ConventionalCommits Test Suite">
             <directory>tests</directory>
         </testsuite>
     </testsuites>
+    <extensions>
+        <extension class="SoureCode\ConventionalCommits\Tests\Hook\BypassFinalHook"/>
+    </extensions>
 </phpunit>

@@ -24,15 +24,18 @@ return function (ContainerConfigurator $configurator) {
 
     $services
         ->set(Application::class)
+        ->lazy()
         ->call('setCommandLoader', [service('console.command_loader')])
         ->public();
 
     $services
         ->load('SoureCode\\ConventionalCommits\\Commands\\', '../src/Commands/*')
+        ->lazy()
         ->tag('console.command');
 
     $services
         ->set('configuration.locator', FileLocator::class)
+        ->lazy()
         ->args(
             [
                 param('kernel.working_directory'),
@@ -42,6 +45,7 @@ return function (ContainerConfigurator $configurator) {
     $services
         ->set('configuration.loader.json', JsonFileLoader::class)
         ->tag('configuration.loader')
+        ->lazy()
         ->args(
             [
                 service('configuration.locator'),
@@ -50,10 +54,12 @@ return function (ContainerConfigurator $configurator) {
 
     $services
         ->set('configuration.loader.resolver', LoaderResolver::class)
+        ->lazy()
         ->call('addLoader', [service('configuration.loader.json')]);
 
     $services
         ->set('configuration.loader.delegating', DelegatingLoader::class)
+        ->lazy()
         ->args(
             [
                 service('configuration.loader.resolver'),
@@ -62,6 +68,7 @@ return function (ContainerConfigurator $configurator) {
 
     $services
         ->set('configuration.loader', ConfigurationLoader::class)
+        ->lazy()
         ->args(
             [
                 service('configuration.locator'),
@@ -72,10 +79,12 @@ return function (ContainerConfigurator $configurator) {
 
     $services
         ->set('validation.validator', ValidatorInterface::class)
+        ->lazy()
         ->factory([Validation::class, 'createValidator']);
 
     $services
         ->set('validation.commit.validator', Validator::class)
+        ->lazy()
         ->args(
             [
                 service('validation.validator'),
@@ -85,9 +94,12 @@ return function (ContainerConfigurator $configurator) {
         ->alias(Validator::class, 'validation.commit.validator');
 
     $services
-        ->set(GitWrapper::class);
+        ->set(GitWrapper::class)
+        ->synthetic()
+        ->lazy();
 
     $services->set(GitCommitRanges::class)
+        ->lazy()
         ->args(
             [
                 service(GitWrapper::class),
