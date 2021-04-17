@@ -3,7 +3,6 @@
 namespace SoureCode\ConventionalCommits\Commands;
 
 use SoureCode\ConventionalCommits\Git\GitCommitRanges;
-use SoureCode\ConventionalCommits\Git\GitCommitRangeSet;
 use SoureCode\ConventionalCommits\Message\Message;
 use SoureCode\ConventionalCommits\Validator\Validator;
 use Symfony\Component\Console\Command\Command;

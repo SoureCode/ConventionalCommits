@@ -4,6 +4,7 @@ namespace SoureCode\ConventionalCommits\Git;
 
 use function count;
 use InvalidArgumentException;
+use Symfony\Component\String\AbstractUnicodeString;
 use function Symfony\Component\String\u;
 use Symplify\GitWrapper\GitCommit;
 use Symplify\GitWrapper\GitWrapper;
@@ -21,8 +22,6 @@ class GitCommitRanges
     }
 
     /**
-     * @param string $text
-     *
      * @return GitCommit[]
      */
     public function fetchRanges(string $text): array
@@ -35,7 +34,7 @@ class GitCommitRanges
     }
 
     /**
-     * @param string[] $ranges
+     * @param AbstractUnicodeString[] $ranges
      *
      * @return GitCommit[]
      */
@@ -50,7 +49,7 @@ class GitCommitRanges
         $commits = [];
 
         foreach ($ranges as $range) {
-            $hashes = u($range)->split('-');
+            $hashes = $range->split('-');
             $hashesCount = count($hashes);
 
             if (1 === $hashesCount) {
@@ -60,7 +59,7 @@ class GitCommitRanges
 
                 $commits[] = $gitCommits->fetchRange((string) $first, (string) $last);
             } else {
-                throw new InvalidArgumentException(sprintf('Invalid commit range: "%s"', $range));
+                throw new InvalidArgumentException(sprintf('Invalid commit range: "%s"', (string) $range));
             }
         }
 
