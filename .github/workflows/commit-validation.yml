@@ -1,4 +1,4 @@
-name: "Check Coding Standards"
+name: "Check Commits"
 
 on:
     pull_request:
