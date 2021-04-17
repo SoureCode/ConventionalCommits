@@ -20,7 +20,7 @@ jobs:
                     tools: phive
                     ini-values: memory_limit=-1
 
-            -   run: phive install
+            -   run: phive install --force-accept-unsigned
 
             -   run: ./tools/box compile
 
