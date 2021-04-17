@@ -22,3 +22,5 @@ A library to parse and format [conventional commit](https://www.conventionalcomm
 ```
 composer require sourecode/conventional-commits
 ```
+
+A change
