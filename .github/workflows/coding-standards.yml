@@ -6,15 +6,7 @@ on:
 jobs:
     coding-standards:
         name: "Check Coding Standards"
-
-        runs-on: ${{ matrix.operating-system }}
-
-        strategy:
-            matrix:
-                php-version:
-                    - "8.0"
-                operating-system:
-                    - "ubuntu-latest"
+        runs-on: ubuntu-latest
         steps:
             -   name: "Checkout"
                 uses: "actions/checkout@v2"
@@ -23,7 +15,7 @@ jobs:
                 uses: "shivammathur/setup-php@v2"
                 with:
                     coverage: "pcov"
-                    php-version: "${{ matrix.php-version }}"
+                    php-version: "8.0"
                     ini-values: memory_limit=-1
 
             -   name: "Cache dependencies"
@@ -32,11 +24,11 @@ jobs:
                     path: |
                         ~/.composer/cache
                         vendor
-                    key: "php-${{ matrix.php-version }}-${{ matrix.dependencies }}"
-                    restore-keys: "php-${{ matrix.php-version }}-${{ matrix.dependencies }}"
+                    key: "php-8.0-ubuntu-latest"
+                    restore-keys: "php-8.0-ubuntu-latest"
 
             -   name: "Install dependencies"
-                run: "composer install --no-interaction --no-progress --no-suggest"
+                run: "composer install --no-interaction --no-progress"
 
             -   name: "php-cs-fixer"
                 run: vendor/bin/php-cs-fixer fix --dry-run --diff
