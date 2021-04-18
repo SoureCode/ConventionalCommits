@@ -11,7 +11,6 @@ jobs:
     phpunit:
         name: "PHPUnit Tests"
         runs-on: ubuntu-latest
-
         strategy:
             matrix:
                 dependencies:
@@ -42,15 +41,15 @@ jobs:
 
             -   name: "Install lowest dependencies"
                 if: ${{ matrix.dependencies == 'lowest' }}
-                run: "composer update --prefer-lowest --no-interaction --no-progress --no-suggest"
+                run: "composer update --prefer-lowest --no-interaction --no-progress"
 
             -   name: "Install highest dependencies"
                 if: ${{ matrix.dependencies == 'highest' }}
-                run: "composer update --no-interaction --no-progress --no-suggest"
+                run: "composer update --no-interaction --no-progress"
 
             -   name: "Install locked dependencies"
                 if: ${{ matrix.dependencies == 'locked' }}
-                run: "composer install --no-interaction --no-progress --no-suggest"
+                run: "composer install --no-interaction --no-progress"
 
             -   name: "phpunit"
                 run: vendor/bin/phpunit --coverage-clover coverage.xml
