@@ -212,33 +212,33 @@ HEREFOC,
             // Commit ranges
             [
                 [
-                    '41491a5c-7fd08bb1' => $range1,
+                    '41491a5c...7fd08bb1' => $range1,
                 ],
             ],
             [
                 [
-                    '7fd08bb1-41491a5c' => $range1,
+                    '7fd08bb1...41491a5c' => $range1,
                 ],
             ],
             // Multiple commit ranges
             [
                 [
-                    '584923ca-41491a5c,97b09e8b-7fd08bb1' => $range2,
+                    '584923ca...41491a5c,97b09e8b...7fd08bb1' => $range2,
                 ],
             ],
             [
                 [
-                    '41491a5c-584923ca,97b09e8b-7fd08bb1' => $range2,
+                    '41491a5c...584923ca,97b09e8b...7fd08bb1' => $range2,
                 ],
             ],
             [
                 [
-                    '584923ca-41491a5c,7fd08bb1-97b09e8b' => $range2,
+                    '584923ca...41491a5c,7fd08bb1...97b09e8b' => $range2,
                 ],
             ],
             [
                 [
-                    '41491a5c-584923ca,7fd08bb1-97b09e8b' => $range2,
+                    '41491a5c...584923ca,7fd08bb1...97b09e8b' => $range2,
                 ],
             ],
         ];
@@ -261,7 +261,7 @@ HEREFOC,
             ],
             [
                 [
-                    '7fd08bb1-2662bdb9' => [
+                    '7fd08bb1...2662bdb9' => [
                         '2662bdb90202d93cd19c264960be45099b037d7a',
                         '7fd08bb195ac66087a444d399a4882dce653a337',
                     ],
@@ -270,7 +270,7 @@ HEREFOC,
             ],
             [
                 [
-                    '2662bdb9-7fd08bb1' => [
+                    '2662bdb9...7fd08bb1' => [
                         '2662bdb90202d93cd19c264960be45099b037d7a',
                         '7fd08bb195ac66087a444d399a4882dce653a337',
                     ],

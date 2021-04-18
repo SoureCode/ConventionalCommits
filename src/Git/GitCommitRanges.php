@@ -49,7 +49,7 @@ class GitCommitRanges
         $commits = [];
 
         foreach ($ranges as $range) {
-            $hashes = $range->split('-');
+            $hashes = $range->split('...');
             $hashesCount = count($hashes);
 
             if (1 === $hashesCount) {
