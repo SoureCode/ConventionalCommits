@@ -33,4 +33,4 @@ jobs:
                 run: "composer install --no-interaction --no-progress --no-suggest"
 
             -   name: "Check commits"
-                run: "./bin/conventional-commits validate:commit -vv remotes/origin/$GITHUB_BASE_REF-remotes/origin/$GITHUB_HEAD_REF"
+                run: "./bin/conventional-commits validate:commit -vv remotes/origin/$GITHUB_BASE_REF...remotes/origin/$GITHUB_HEAD_REF"
