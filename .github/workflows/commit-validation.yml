@@ -30,7 +30,7 @@ jobs:
                     restore-keys: "php-8.0"
 
             -   name: "Install dependencies"
-                run: "composer install --no-interaction --no-progress --no-suggest"
+                run: "composer install --no-interaction --no-progress"
 
             -   name: "Check commits"
                 run: "./bin/conventional-commits validate:commit -vv remotes/origin/$GITHUB_BASE_REF...remotes/origin/$GITHUB_HEAD_REF"
