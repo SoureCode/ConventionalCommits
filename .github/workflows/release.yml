@@ -20,6 +20,9 @@ jobs:
                     tools: phive
                     ini-values: memory_limit=-1
 
+            -   name: "Install dependencies"
+                run: "composer install --no-interaction --no-progress"
+
             -   run: phive install --force-accept-unsigned
 
             -   run: ./tools/box compile
